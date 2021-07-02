@@ -13,6 +13,7 @@ class MovieListTableViewController: UITableViewController {
         super.viewDidLoad()
 
         tableView.register(MovieListTableViewCell.getNib(), forCellReuseIdentifier: MovieListTableViewCell.identifier)
+        
     }
 
     // MARK: - Table view data source
