@@ -65,6 +65,13 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="movieGenre" destination="Xe2-Um-t2J" id="j4V-fI-z5i"/>
+                <outlet property="movieImage" destination="ZJa-jO-PZ0" id="qFP-jo-4Ox"/>
+                <outlet property="movieName" destination="sYX-d5-QxV" id="75f-Th-EiX"/>
+                <outlet property="popularityScore" destination="AeR-kX-Rlb" id="pqm-Re-kkG"/>
+                <outlet property="releaseYear" destination="pfW-eN-kAt" id="v3n-qX-f6f"/>
+            </connections>
             <point key="canvasLocation" x="-4.3478260869565224" y="90.401785714285708"/>
         </tableViewCell>
     </objects>

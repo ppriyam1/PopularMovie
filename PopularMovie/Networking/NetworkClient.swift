@@ -16,10 +16,10 @@ struct NetworkClient {
     
     let networkManger = NetworkManager()
     
-    func getMovieData(pageNumber : Int, completion: @escaping(MovieData?,Error?) -> Void) {
-        if let url = URL(string: URLConstants.movieURL + "\(pageNumber)") {
-        
-            networkManger.getData(requestUrl: url, resultType: MovieData.self) { (result : Result<MovieData?, Error>) in
+    //method fetch the genre of the popular movies
+    func getGenreData(completion: @escaping(GenreData?,Error?) -> Void) {
+        if let url = URL(string: URLConstants.genreURL) {
+            networkManger.getData(requestUrl: url, resultType: GenreData.self) { (result : Result<GenreData?, Error>) in
                 switch result {
                 case .success(let responseData) :
                     completion(responseData,nil)
@@ -30,10 +30,10 @@ struct NetworkClient {
         }
     }
     
-    func getGenreData(completion: @escaping(GenreData?,Error?) -> Void) {
-        if let url = URL(string: URLConstants.genreURL) {
-        
-            networkManger.getData(requestUrl: url, resultType: GenreData.self) { (result : Result<GenreData?, Error>) in
+    //method to call the method of network manager to fetch the popular movie data based on the page number
+    func getMovieData(pageNumber : Int, completion: @escaping(MovieData?,Error?) -> Void) {
+        if let url = URL(string: URLConstants.movieURL + "\(pageNumber)") {
+            networkManger.getData(requestUrl: url, resultType: MovieData.self) { (result : Result<MovieData?, Error>) in
                 switch result {
                 case .success(let responseData) :
                     completion(responseData,nil)

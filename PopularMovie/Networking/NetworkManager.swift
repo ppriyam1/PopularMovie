@@ -17,6 +17,7 @@ struct NetworkManager {
     }
     func getData <T: Decodable> (requestUrl: URL, resultType: T.Type, completion: @escaping(Result<T?, Error>) -> Void) {
         
+        //url session to fetch the data from the API
         URLSession.shared.dataTask(with: requestUrl) { data, urlResponse, error in
             
             let result: Result<T?, Error>
@@ -37,8 +38,10 @@ struct NetworkManager {
                 }
                 
                 let response = try JSONDecoder().decode(T.self, from: data ?? Data())
+                //save the response in result if networking is successful
                 result = .success(response)
             }catch {
+                //else save the error in result
                 result = .failure(error)
             }
             
