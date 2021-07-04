@@ -5,7 +5,7 @@
 //  Created by Preeti Priyam on 7/2/21.
 //
 
-import Foundation
+import UIKit
 
 struct MovieListStructure {
     var title, releaseDate, genre, thumbnail, popularityScore : String
@@ -18,23 +18,28 @@ class MovieListViewModel {
     var genreData : GenreData?
     
     //created dispatch group to get the genre name before fetching the movie data
-    func enter(completion : @escaping ([MovieListStructure]?) -> Void ) {
+    func enter(pageNumber : Int, completion : @escaping ([MovieListStructure]?) -> Void ) {
         let dispatchGroup = DispatchGroup()
         let networkClient = NetworkClient()
         
+        //dispatch group to enter and leave the scope
         dispatchGroup.enter()
-        networkClient.getGenreData { [weak self] result, error in
-            DispatchQueue.main.async {
-                if let result = result {
-                    self?.genreData = result
+        if pageNumber == 1 {
+            networkClient.getGenreData { [weak self] result, error in
+                DispatchQueue.main.async {
+                    if let result = result {
+                        self?.genreData = result
+                    }
+                    print("getGenreData")
+                    dispatchGroup.leave()
                 }
-                print("getGenreData")
-                dispatchGroup.leave()
             }
+        }else{
+            dispatchGroup.leave()
         }
         
         dispatchGroup.enter()
-        networkClient.getMovieData(pageNumber: 1) { [weak self] result, error in
+        networkClient.getMovieData(pageNumber: pageNumber) { [weak self] result, error in
             DispatchQueue.main.async {
                 if let result = result {
                     self?.movieData = result
@@ -58,7 +63,7 @@ class MovieListViewModel {
             completion(self.movieListStructure)
         }
         
-        //converting genreid to genreNames
+        //function to convert genreid to genreNames
         func getGenre(genreIds : [Int]) -> String {
             var genreString = ""
             for genreId in genreIds {
@@ -73,4 +78,8 @@ class MovieListViewModel {
             return genreString
         }
     }
+}
+
+extension UIView {
+    
 }

@@ -7,25 +7,21 @@
 
 import UIKit
 
+
 class MovieListTableViewController: UITableViewController {
+    
     
     let viewModel = MovieListViewModel()
     var movieListStructure : [MovieListStructure]?
-    var pageNum = -1
+    var pageNum = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //registed the nib file
         tableView.register(MovieListTableViewCell.getNib(), forCellReuseIdentifier: MovieListTableViewCell.identifier)
-
-        viewModel.enter { [weak self] results in
-            if let results = results {
-                self?.movieListStructure = results
-                DispatchQueue.main.async {
-                    self?.tableView.reloadData()
-                }
-            }
-        }
+        
+        fetchMovieData()
     }
     
     // MARK: - Table view data source
@@ -43,12 +39,29 @@ class MovieListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MovieListTableViewCell.identifier, for: indexPath) as! MovieListTableViewCell
         
+        //update pagenumber when all the page data displayed
+        if indexPath.row == (movieListStructure!.count - 1) && pageNum <= 1000{
+            pageNum += 1
+            fetchMovieData()
+        }
+        
         cell.movieName.text = movieListStructure?[indexPath.row].title
         cell.popularityScore.text = movieListStructure?[indexPath.row].popularityScore
         cell.releaseYear.text = movieListStructure?[indexPath.row].releaseDate
         cell.movieGenre.text = movieListStructure?[indexPath.row].genre
+        
         return cell
 }
-    //function to get genreString based on id
     
+    //func to fetch the data based on page number
+    func fetchMovieData() {
+        viewModel.enter(pageNumber: pageNum) { [weak self] results in
+            if let results = results {
+                self?.movieListStructure = results
+                DispatchQueue.main.async {
+                    self?.tableView.reloadData()
+                }
+            }
+        }
+    }
 }
