@@ -7,13 +7,11 @@
 
 import UIKit
 
-
 class MovieListTableViewController: UITableViewController {
     
-    
-    let viewModel = MovieListViewModel()
-    var movieListStructure : [MovieListStructure]?
-    var pageNum = 1
+    private let viewModel = MovieListViewModel()
+    private var movieListStructure : [MovieListStructure]?
+    private var pageNum = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +21,8 @@ class MovieListTableViewController: UITableViewController {
         
         fetchMovieData()
     }
+    
+    //prepare
     
     // MARK: - Table view data source
     
@@ -49,9 +49,12 @@ class MovieListTableViewController: UITableViewController {
         cell.popularityScore.text = movieListStructure?[indexPath.row].popularityScore
         cell.releaseYear.text = movieListStructure?[indexPath.row].releaseDate
         cell.movieGenre.text = movieListStructure?[indexPath.row].genre
+        let movieImageUrl = URL(string: (movieListStructure?[indexPath.row].thumbnail)!)!
+        print(movieImageUrl)
+        cell.movieImage.loadImage(fromUrl: movieImageUrl)
         
         return cell
-}
+    }
     
     //func to fetch the data based on page number
     func fetchMovieData() {

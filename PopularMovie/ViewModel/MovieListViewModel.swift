@@ -7,15 +7,21 @@
 
 import UIKit
 
+protocol MovieListDelegate{
+    func checkResponse(error : Error?)
+}
+
 struct MovieListStructure {
     var title, releaseDate, genre, thumbnail, popularityScore : String
 }
 
 class MovieListViewModel {
     
+    var delegate : MovieListDelegate?
+    
     var movieListStructure : [MovieListStructure] = []
-    var movieData : MovieData?
-    var genreData : GenreData?
+    private var movieData : MovieData?
+    private var genreData : GenreData?
     
     //created dispatch group to get the genre name before fetching the movie data
     func enter(pageNumber : Int, completion : @escaping ([MovieListStructure]?) -> Void ) {
@@ -26,6 +32,10 @@ class MovieListViewModel {
         dispatchGroup.enter()
         if pageNumber == 1 {
             networkClient.getGenreData { [weak self] result, error in
+                
+                if error != nil {
+                    self?.delegate?.checkResponse(error: error)
+                }
                 DispatchQueue.main.async {
                     if let result = result {
                         self?.genreData = result
@@ -40,6 +50,11 @@ class MovieListViewModel {
         
         dispatchGroup.enter()
         networkClient.getMovieData(pageNumber: pageNumber) { [weak self] result, error in
+            
+            if error != nil {
+                self?.delegate?.checkResponse(error: error)
+            }
+            //https://image.tmdb.org/t/p/w500/qIicLxr7B7gIt5hxZxo423BJLlK.jpg
             DispatchQueue.main.async {
                 if let result = result {
                     self?.movieData = result
@@ -49,7 +64,7 @@ class MovieListViewModel {
                             title: (self?.movieData?.results?[index].title)!,
                             releaseDate: (self?.movieData?.results?[index].releaseDate)!,
                             genre: getGenre(genreIds: (self?.movieData?.results?[index].genreIDS)!),
-                            thumbnail: (self?.movieData?.results?[index].posterPath)!,
+                            thumbnail: ("https://image.tmdb.org/t/p/w500\(self?.movieData?.results?[index].posterPath ?? "")"),
                             popularityScore: String((self?.movieData?.results?[index].popularity)!)
                         ))
                     }
@@ -67,19 +82,17 @@ class MovieListViewModel {
         func getGenre(genreIds : [Int]) -> String {
             var genreString = ""
             for genreId in genreIds {
-                for genre in (genreData?.genres)! {
+                if let geners = (genreData?.genres) {
+                for genre in geners {
                     if genreId == genre.id {
                         genreString += genre.name! + ","
                         continue
                     }
                 }
             }
+            }
             genreString.remove(at: genreString.index(before: genreString.endIndex))
             return genreString
         }
     }
-}
-
-extension UIView {
-    
 }

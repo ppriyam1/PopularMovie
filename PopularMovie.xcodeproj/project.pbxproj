@@ -22,6 +22,7 @@
 		58B0B683268F59D600FBDBBB /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B0B682268F59D600FBDBBB /* NetworkManager.swift */; };
 		58B0B685268F5D9700FBDBBB /* MovieListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B0B684268F5D9700FBDBBB /* MovieListTableViewController.swift */; };
 		58B0B68A268FA3F400FBDBBB /* MovieListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B0B689268FA3F400FBDBBB /* MovieListViewModel.swift */; };
+		58B0B68C26934EF500FBDBBB /* RemoteImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58B0B68B26934EF500FBDBBB /* RemoteImageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +64,7 @@
 		58B0B682268F59D600FBDBBB /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		58B0B684268F5D9700FBDBBB /* MovieListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListTableViewController.swift; sourceTree = "<group>"; };
 		58B0B689268FA3F400FBDBBB /* MovieListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieListViewModel.swift; sourceTree = "<group>"; };
+		58B0B68B26934EF500FBDBBB /* RemoteImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteImageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,13 +118,13 @@
 				589C5C47268F1338007EB387 /* Model */,
 				589C5C48268F1340007EB387 /* View */,
 				58B0B688268FA3B700FBDBBB /* ViewModel */,
-				589C5C4A268F1352007EB387 /* Controller */,
 				589C5C46268F1328007EB387 /* Networking */,
 				589C5C14268F117B007EB387 /* AppDelegate.swift */,
 				589C5C16268F117B007EB387 /* SceneDelegate.swift */,
 				589C5C1D268F117D007EB387 /* Assets.xcassets */,
 				589C5C1F268F117D007EB387 /* LaunchScreen.storyboard */,
 				589C5C22268F117D007EB387 /* Info.plist */,
+				58B0B68B26934EF500FBDBBB /* RemoteImageView.swift */,
 			);
 			path = PopularMovie;
 			sourceTree = "<group>";
@@ -169,6 +171,7 @@
 				589C5C1A268F117B007EB387 /* Main.storyboard */,
 				589C5C4E268F13E6007EB387 /* MovieListTableViewCell.swift */,
 				589C5C52268F1560007EB387 /* MovieListTableViewCell.xib */,
+				589C5C4A268F1352007EB387 /* Controller */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 				58B0B683268F59D600FBDBBB /* NetworkManager.swift in Sources */,
 				589C5C17268F117B007EB387 /* SceneDelegate.swift in Sources */,
 				589C5C57268F1618007EB387 /* GenreData.swift in Sources */,
+				58B0B68C26934EF500FBDBBB /* RemoteImageView.swift in Sources */,
 				58B0B68A268FA3F400FBDBBB /* MovieListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

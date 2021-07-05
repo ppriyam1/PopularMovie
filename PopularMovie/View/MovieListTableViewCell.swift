@@ -9,7 +9,7 @@ import UIKit
 
 class MovieListTableViewCell: UITableViewCell {
     
-    @IBOutlet weak var movieImage: UIImageView!
+    @IBOutlet weak var movieImage: RemoteImageView!
     @IBOutlet weak var movieName: UILabel!
     @IBOutlet weak var movieGenre: UILabel!
     @IBOutlet weak var popularityScore: UILabel!

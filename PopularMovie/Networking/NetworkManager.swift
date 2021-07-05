@@ -13,8 +13,8 @@ struct NetworkManager {
         case badResponseStatusCode(Int)
         case NetworkingError(Error)
         case unknown
-        
     }
+    
     func getData <T: Decodable> (requestUrl: URL, resultType: T.Type, completion: @escaping(Result<T?, Error>) -> Void) {
         
         //url session to fetch the data from the API
@@ -28,9 +28,7 @@ struct NetworkManager {
                 }
                 
                 guard let urlResponse = urlResponse as? HTTPURLResponse else {
-                    let userInfo = [NSLocalizedDescriptionKey : NSLocalizedString("Missing HTTP Response", comment: "")]
-                    let error = NSError(domain: "Networking Error", code: 1, userInfo: userInfo)
-                    throw ResponseError.NetworkingError(error)
+                    throw error ?? ResponseError.unknown
                 }
                 
                 guard (200 ..< 300).contains(urlResponse.statusCode) else {
