@@ -11,9 +11,9 @@ class RemoteImageView: UIImageView {
     
     private let imageCache = NSCache<AnyObject, UIImage>()
     
-    func loadImage(fromUrl imageURL: URL) {
+    func loadImage(fromUrl imageURL: URL, key : String) {
         
-        if let cachedImage = self.imageCache.object(forKey: imageURL as AnyObject) {
+        if let cachedImage = self.imageCache.object(forKey: key as AnyObject) {
             self.image = cachedImage
             return
         }
@@ -24,14 +24,12 @@ class RemoteImageView: UIImageView {
             if let imageData = try? Data(contentsOf: imageURL) {
                 if let image = UIImage(data: imageData) {
                     DispatchQueue.main.async {
-                        //Cache downloaded image
-                        self?.imageCache.setObject(image, forKey: imageURL as AnyObject)
+                        //Cache to save downloaded image
+                        self?.imageCache.setObject(image, forKey: key as AnyObject)
                         self?.image = image
                     }
                 }
             }
         }
-        
     }
-    
 }

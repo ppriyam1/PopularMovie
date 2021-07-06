@@ -31,7 +31,7 @@ struct NetworkManager {
                     throw error ?? ResponseError.unknown
                 }
                 
-                guard (200 ..< 300).contains(urlResponse.statusCode) else {
+                guard (200..<300).contains(urlResponse.statusCode) else {
                     throw ResponseError.badResponseStatusCode(urlResponse.statusCode)
                 }
                 

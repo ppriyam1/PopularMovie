@@ -18,14 +18,10 @@ class MovieListTableViewController: UITableViewController {
         
         //registed the nib file
         tableView.register(MovieListTableViewCell.getNib(), forCellReuseIdentifier: MovieListTableViewCell.identifier)
-        
         fetchMovieData()
     }
     
-    //prepare
-    
     // MARK: - Table view data source
-    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
@@ -44,21 +40,25 @@ class MovieListTableViewController: UITableViewController {
             pageNum += 1
             fetchMovieData()
         }
-        
         cell.movieName.text = movieListStructure?[indexPath.row].title
         cell.popularityScore.text = movieListStructure?[indexPath.row].popularityScore
         cell.releaseYear.text = movieListStructure?[indexPath.row].releaseDate
         cell.movieGenre.text = movieListStructure?[indexPath.row].genre
         let movieImageUrl = URL(string: (movieListStructure?[indexPath.row].thumbnail)!)!
         print(movieImageUrl)
-        cell.movieImage.loadImage(fromUrl: movieImageUrl)
+        cell.movieImage.loadImage(fromUrl: movieImageUrl, key : (movieListStructure?[indexPath.row].title)!)
         
         return cell
     }
     
     //func to fetch the data based on page number
     func fetchMovieData() {
-        viewModel.enter(pageNumber: pageNum) { [weak self] results in
+        viewModel.enter(pageNumber: pageNum) { [weak self] results, error in
+            if let error = error {
+                DispatchQueue.main.async {
+                    self?.handleDataLoaderFailure(error: error)
+                }
+            }
             if let results = results {
                 self?.movieListStructure = results
                 DispatchQueue.main.async {

@@ -7,24 +7,18 @@
 
 import UIKit
 
-protocol MovieListDelegate{
-    func checkResponse(error : Error?)
-}
-
 struct MovieListStructure {
     var title, releaseDate, genre, thumbnail, popularityScore : String
 }
 
 class MovieListViewModel {
     
-    var delegate : MovieListDelegate?
-    
     var movieListStructure : [MovieListStructure] = []
     private var movieData : MovieData?
     private var genreData : GenreData?
     
     //created dispatch group to get the genre name before fetching the movie data
-    func enter(pageNumber : Int, completion : @escaping ([MovieListStructure]?) -> Void ) {
+    func enter(pageNumber : Int, completion : @escaping ([MovieListStructure]?,Error?) -> Void ) {
         let dispatchGroup = DispatchGroup()
         let networkClient = NetworkClient()
         
@@ -34,7 +28,7 @@ class MovieListViewModel {
             networkClient.getGenreData { [weak self] result, error in
                 
                 if error != nil {
-                    self?.delegate?.checkResponse(error: error)
+                    completion(nil,error)
                 }
                 DispatchQueue.main.async {
                     if let result = result {
@@ -52,13 +46,13 @@ class MovieListViewModel {
         networkClient.getMovieData(pageNumber: pageNumber) { [weak self] result, error in
             
             if error != nil {
-                self?.delegate?.checkResponse(error: error)
+                completion(nil,error)
             }
-            //https://image.tmdb.org/t/p/w500/qIicLxr7B7gIt5hxZxo423BJLlK.jpg
             DispatchQueue.main.async {
                 if let result = result {
                     self?.movieData = result
                     for index in 0..<(self?.movieData?.results?.count)! {
+                        
                         //appending all the data to the movielist structure
                         self?.movieListStructure.append(MovieListStructure(
                             title: (self?.movieData?.results?[index].title)!,
@@ -75,7 +69,7 @@ class MovieListViewModel {
         }
         
         dispatchGroup.notify(queue: .main) {
-            completion(self.movieListStructure)
+            completion(self.movieListStructure,nil)
         }
         
         //function to convert genreid to genreNames
@@ -85,14 +79,47 @@ class MovieListViewModel {
                 if let geners = (genreData?.genres) {
                 for genre in geners {
                     if genreId == genre.id {
-                        genreString += genre.name! + ","
+                        genreString += genre.name! + ", "
                         continue
                     }
                 }
-            }
+              }
             }
             genreString.remove(at: genreString.index(before: genreString.endIndex))
+            genreString.remove(at: genreString.index(before: genreString.endIndex))
             return genreString
+        }
+    }
+}
+
+extension MovieListTableViewController {
+    
+     func handleDataLoaderFailure(error: Error) {
+        
+        let title: String, message: String
+        
+        switch (error as? NetworkManager.ResponseError) ?? .unknown {
+        case .badResponseStatusCode:
+            title = NSLocalizedString("MovieListEmptyTitle", comment: "")
+            message = NSLocalizedString("MovieListEmptyMessage", comment: "")
+
+        case .NetworkingError:
+            title = NSLocalizedString("MissingHttpResponseTitle", comment: "")
+            message = NSLocalizedString("MissingHttpResponseFailureMessage", comment: "")
+
+        case .unknown:
+            title = NSLocalizedString("MovieListLoadFailureTitle", comment: "")
+            message = NSLocalizedString("MovieListLoadFailureTitle", comment: "")
+        }
+
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let action = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default)
+
+        alert.addAction(action)
+        alert.preferredAction = action
+        
+        DispatchQueue.main.async {
+            self.present(alert, animated: true)
         }
     }
 }
