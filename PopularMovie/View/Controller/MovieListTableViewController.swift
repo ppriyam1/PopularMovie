@@ -51,6 +51,10 @@ class MovieListTableViewController: UITableViewController {
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
+    
     //func to fetch the data based on page number
     func fetchMovieData() {
         viewModel.enter(pageNumber: pageNum) { [weak self] results, error in

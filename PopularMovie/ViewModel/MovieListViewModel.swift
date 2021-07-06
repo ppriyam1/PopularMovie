@@ -77,24 +77,22 @@ class MovieListViewModel {
             var genreString = ""
             for genreId in genreIds {
                 if let geners = (genreData?.genres) {
-                for genre in geners {
-                    if genreId == genre.id {
-                        genreString += genre.name! + ", "
-                        continue
+                    for genre in geners {
+                        if genreId == genre.id {
+                            genreString += genre.name! + ", "
+                            continue
+                        }
                     }
                 }
-              }
             }
-            genreString.remove(at: genreString.index(before: genreString.endIndex))
-            genreString.remove(at: genreString.index(before: genreString.endIndex))
-            return genreString
+            return String(genreString.dropLast(2))
         }
     }
 }
 
 extension MovieListTableViewController {
-    
-     func handleDataLoaderFailure(error: Error) {
+    //method to handle error
+    func handleDataLoaderFailure(error: Error) {
         
         let title: String, message: String
         
@@ -102,19 +100,19 @@ extension MovieListTableViewController {
         case .badResponseStatusCode:
             title = NSLocalizedString("MovieListEmptyTitle", comment: "")
             message = NSLocalizedString("MovieListEmptyMessage", comment: "")
-
+            
         case .NetworkingError:
             title = NSLocalizedString("MissingHttpResponseTitle", comment: "")
             message = NSLocalizedString("MissingHttpResponseFailureMessage", comment: "")
-
+            
         case .unknown:
             title = NSLocalizedString("MovieListLoadFailureTitle", comment: "")
             message = NSLocalizedString("MovieListLoadFailureTitle", comment: "")
         }
-
+        
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default)
-
+        
         alert.addAction(action)
         alert.preferredAction = action
         
